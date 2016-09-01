@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import { Link } from 'react-router';
 
 class Navigator extends Component{
 	render(){ 
@@ -14,4 +15,4 @@ class Navigator extends Component{
 
 
 
-export default App;
+export default Navigator;

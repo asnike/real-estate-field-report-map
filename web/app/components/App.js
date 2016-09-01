@@ -1,12 +1,12 @@
 import React, {Component, PropTypes} from 'react';
-import { Link } from 'react-router'
+import Navigator from './Navigator';
 
 class App extends Component{
 	render(){ 
 		return(
 			<div className="app-container">
 				<Navigator />
-				<div>
+				<div className="work-container">
 					{this.props.children}
 				</div>	
 			</div>

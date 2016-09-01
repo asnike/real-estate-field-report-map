@@ -1,2 +1,4 @@
 /* CSS Document */
-
+.app-container{display:flex;height:100vh;}
+.navigator{width:320px;}
+.work-container{display:flex;flex:1;position:relative;}
