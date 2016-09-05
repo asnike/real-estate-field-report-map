@@ -2,3 +2,9 @@
 .app-container{display:flex;height:100vh;}
 .navigator{width:320px;}
 .work-container{display:flex;flex:1;position:relative;}
+
+.btn>a{color:#fff;}
+.btn>a:hover, .btn>a:visited{text-decoration:none;}
+
+.item-form{position:absolute;width:600px;left:50%;top:0;z-index:3;margin-left:-300px;margin-top:100px;}
+.overlay{position:absolute;width:100%;height:100%;top:0;left:0;background:rgba(0,0,0,.5);z-index:2;}

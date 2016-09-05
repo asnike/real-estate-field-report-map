@@ -44,6 +44,14 @@ var _constants = require('./app/constants');
 
 var _constants2 = _interopRequireDefault(_constants);
 
+var _mongoose = require('mongoose');
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _Item = require('./app/schemas/Item');
+
+var _Item2 = _interopRequireDefault(_Item);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 if (process.env.NODE_ENV == 'development') {
@@ -57,6 +65,15 @@ if (process.env.NODE_ENV == 'development') {
 	});
 }
 
+
+var db = _mongoose2.default.connection;
+db.on('error', console.error);
+db.once('open', function () {
+	console.log('Connected to mongodb server');
+});
+
+_mongoose2.default.connect('mongodb://auction:10904a@104.238.181.94:27017/auction');
+
 var app = (0, _express2.default)();
 
 app.set('views', './');
@@ -65,6 +82,31 @@ app.set('view engine', 'ejs');
 app.use(_express2.default.static(__dirname + '/public'));
 app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: true }));
+
+app.get('/api/items', function (request, response) {
+	_Item2.default.find(function (error, items) {
+		if (error) return response.status(500).send({ error: 'database failure' });
+		response.json(items);
+	});
+});
+
+app.post('/api/item', function (request, response) {
+	var item = new _Item2.default();
+	console.log('body :: ', request.body);
+
+	item.addr = request.body.addr;
+	/*item._member = response.member._id;
+ console.log('after middleware member :: ', response.member._id);*/
+
+	item.save(function (error) {
+		if (error) {
+			console.error(error);
+			response.json({ result: 0 });
+			return;
+		}
+		response.json({ result: 1 });
+	});
+});
 
 app.get('*', function (request, response) {
 	var store = (0, _configureStore2.default)();

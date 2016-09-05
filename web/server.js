@@ -26,6 +26,15 @@ if(process.env.NODE_ENV == 'development') {
         console.log('webpack-dev-server is listening on port', 3001);
     });
 }
+import mongoose from 'mongoose';
+
+const db = mongoose.connection;
+db.on('error', console.error);
+db.once('open', ()=>{
+	console.log('Connected to mongodb server');
+});
+
+mongoose.connect('mongodb://auction:10904a@104.238.181.94:27017/auction');
 
 const app = express();
 
@@ -36,6 +45,32 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+
+import Item from './app/schemas/Item';
+app.get('/api/items', (request, response) => {
+	Item.find((error, items) => {
+		if(error) return response.status(500).send({error:'database failure'});
+		response.json(items);
+	});
+});
+
+app.post('/api/item', (request, response) => {
+	var item = new Item();
+	console.log('body :: ', request.body);
+	
+	item.addr = request.body.addr;
+	/*item._member = response.member._id;
+	console.log('after middleware member :: ', response.member._id);*/
+
+	item.save((error)=>{
+		if(error){
+			console.error(error);
+			response.json({result:0});
+			return;
+		}
+		response.json({result:1});
+	})
+});
 
 app.get('*', (request, response) => {
 	let store = configureStore();
@@ -66,6 +101,9 @@ app.get('*', (request, response) => {
     }
   })
 });
+
+
+
 
 
 
