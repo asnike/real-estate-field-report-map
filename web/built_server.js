@@ -90,7 +90,7 @@ app.use(_bodyParser2.default.urlencoded({ extended: true }));
 app.get('/api/items', function (request, response) {
 	_Item2.default.find(function (error, items) {
 		if (error) return response.status(500).send({ error: 'database failure' });
-		response.json(items);
+		response.json({ result: 1, lists: items });
 	});
 });
 

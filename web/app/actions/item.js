@@ -42,3 +42,42 @@ export function addItem(item, callback){
 	}
 }
 
+export const REQUEST_GET_ITEMS = 'REQUEST_GET_ITEMS';
+export const RECEIVE_GET_ITEMS_SUCCESS = 'RECEIVE_GET_ITEMS_SUCCESS';
+export const RECEIVE_GET_ITEMS_ERROR = 'RECEIVE_GET_ITEMS_ERROR';
+
+function requestGetItems(){
+	return {
+		type:REQUEST_GET_ITEMS,
+	}
+}
+function receiveGetItemsSuccess(result){
+	return {
+		type:RECEIVE_GET_ITEMS_SUCCESS,
+		result,
+	}
+}
+function receiveGetItemsError(error){
+	return {
+		type:RECEIVE_GET_ITEMS_ERROR,
+		error,
+	}
+}
+export function getItems(item, callback){
+	return dispatch => {
+		dispatch(requestGetItems);
+		fetch(`${constants.API_URL}/items`, {
+			method:'GET',
+			headers:constants.HEADERS,
+			mode:'cors',
+			cache:'default'
+		})
+		.then((response) => response.json())
+		.then((response) => {
+			if(response.error) dispatch(receiveGetItemsError(response))
+			else dispatch(receiveGetItemsSuccess(response));
+		})
+		.catch(error => dispatch(receiveGetItemsError(error)));
+	}
+}
+

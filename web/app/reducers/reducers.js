@@ -6,9 +6,13 @@ import {
 	REQUEST_ADD_ITEM, 
 	REQUEST_ADD_ITEM_SUCCESS,
 	REQUEST_ADD_ITEM_ERROR,
+	
+	REQUEST_GET_ITEMS, 
+	RECEIVE_GET_ITEMS_SUCCESS,
+	RECEIVE_GET_ITEMS_ERROR,
  } from '../actions/item';
 
-function item(state={isFetching:false}, action){
+function item(state={isFetching:false, lists:null}, action){
 	switch(action.type){
 	case REQUEST_ADD_ITEM:
 		return Object.assign({}, state, {
@@ -24,6 +28,20 @@ function item(state={isFetching:false}, action){
 		return Object.assign({}, state, {
 			
 		}); 
+	case REQUEST_GET_ITEMS:
+		return Object.assign({}, state, {
+			isFetching:true,
+		}); 
+	case RECEIVE_GET_ITEMS_SUCCESS:
+		browserHistory.pushState(null, '/map');
+		return Object.assign({}, state, {
+			lists:action.lists,
+		}); 
+	case RECEIVE_GET_ITEMS_ERROR:
+		browserHistory.pushState(null, '/map');
+		return Object.assign({}, state, {
+			
+		}); 	
 	default :
 		return state;	
 	}

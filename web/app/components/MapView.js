@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as MapActions from '../actions/map';
+import * as ItemActions from '../actions/item';
 
 
 class MapView extends Component{
@@ -17,7 +17,7 @@ class MapView extends Component{
 			var map = new naver.maps.Map('map', mapOptions);	
 		}, 100);*/
 		
-		//this.props.actions.map.fetchMapData();
+		this.props.actions.item.getItems();
 	}
 	render(){
 		return (
@@ -31,13 +31,13 @@ class MapView extends Component{
 
 function mapStateToProps(state){
 	return {
-		map:state.map
+		items:state.items
 	};
 }
 function mapDispatchToProps(dispatch){
 	return {
 		actions:{
-			map:bindActionCreators(MapActions, dispatch),
+			item:bindActionCreators(ItemActions, dispatch),
 		}
 	}
 }

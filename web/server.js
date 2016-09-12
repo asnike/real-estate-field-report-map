@@ -52,7 +52,7 @@ import Item from './app/schemas/Item';
 app.get('/api/items', (request, response) => {
 	Item.find((error, items) => {
 		if(error) return response.status(500).send({error:'database failure'});
-		response.json(items);
+		response.json({result:1, lists:items});
 	});
 });
 
@@ -65,9 +65,7 @@ app.post('/api/item', (request, response) => {
 	console.log('after middleware member :: ', response.member._id);*/
 	
 	var url = 'https://openapi.naver.com/v1/map/geocode?query=';
-	//var url = 'https://openapi.naver.com/v1/map/geocode?query=';
 	url += encodeURIComponent(item.addr);
-	console.log('url :: ', url);
 	_request({
 		method:'GET',
 		url:url,
