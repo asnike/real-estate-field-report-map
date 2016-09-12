@@ -25,7 +25,7 @@ function receiveAddItemError(error){
 }
 export function addItem(item, callback){
 	return dispatch => {
-		dispatch(requestSignup());
+		dispatch(requestAddItem);
 		fetch(`${constants.API_URL}/item`, {
 			method:'POST',
 			headers:constants.HEADERS,

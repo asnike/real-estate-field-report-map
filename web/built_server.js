@@ -44,6 +44,10 @@ var _constants = require('./app/constants');
 
 var _constants2 = _interopRequireDefault(_constants);
 
+var _request2 = require('request');
+
+var _request3 = _interopRequireDefault(_request2);
+
 var _mongoose = require('mongoose');
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
@@ -98,13 +102,35 @@ app.post('/api/item', function (request, response) {
 	/*item._member = response.member._id;
  console.log('after middleware member :: ', response.member._id);*/
 
-	item.save(function (error) {
-		if (error) {
-			console.error(error);
-			response.json({ result: 0 });
-			return;
+	var url = 'https://openapi.naver.com/v1/map/geocode?query=';
+	//var url = 'https://openapi.naver.com/v1/map/geocode?query=';
+	url += encodeURIComponent(item.addr);
+	console.log('url :: ', url);
+	(0, _request3.default)({
+		method: 'GET',
+		url: url,
+		headers: {
+			'X-Naver-Client-Id': 'X07WMRkyOdGTlRJl1Zne',
+			'X-Naver-Client-Secret': 'h2cSFBzghh'
 		}
-		response.json({ result: 1 });
+	}, function (err, res, body) {
+		if (!err && res.statusCode == 200) {
+			var t0 = JSON.parse(body);
+			item.lon = t0.result.items[0].point.x;
+			item.lat = t0.result.items[0].point.y;
+			item.save(function (error) {
+				if (error) {
+					console.error(error);
+					response.json({ result: 0 });
+					return;
+				}
+				response.json({ result: 1 });
+			});
+		} else {
+			console.log('error :: ', err);
+			console.log('status :: ', res.statusCode);
+			console.log('body :: ', body);
+		}
 	});
 });
 

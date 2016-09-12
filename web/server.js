@@ -15,6 +15,7 @@ import { match, RouterContext } from 'react-router';
 
 import routes from './app/routes';
 import constants from './app/constants';
+import _request from 'request';
 
 if(process.env.NODE_ENV == 'development') {
     console.log('Server is running on development mode');
@@ -47,6 +48,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 
 import Item from './app/schemas/Item';
+
 app.get('/api/items', (request, response) => {
 	Item.find((error, items) => {
 		if(error) return response.status(500).send({error:'database failure'});
@@ -61,15 +63,37 @@ app.post('/api/item', (request, response) => {
 	item.addr = request.body.addr;
 	/*item._member = response.member._id;
 	console.log('after middleware member :: ', response.member._id);*/
-
-	item.save((error)=>{
-		if(error){
-			console.error(error);
-			response.json({result:0});
-			return;
+	
+	var url = 'https://openapi.naver.com/v1/map/geocode?query=';
+	//var url = 'https://openapi.naver.com/v1/map/geocode?query=';
+	url += encodeURIComponent(item.addr);
+	console.log('url :: ', url);
+	_request({
+		method:'GET',
+		url:url,
+		headers:{
+			'X-Naver-Client-Id':'X07WMRkyOdGTlRJl1Zne',
+			'X-Naver-Client-Secret':'h2cSFBzghh',
+		},
+	}, (err, res, body)=>{
+		if(!err && res.statusCode == 200){
+			var t0 = JSON.parse(body);
+			item.lon = t0.result.items[0].point.x;
+			item.lat = t0.result.items[0].point.y;
+			item.save((error)=>{
+				if(error){
+					console.error(error);
+					response.json({result:0});
+					return;
+				}
+				response.json({result:1});
+			})	
+		}else{
+			console.log('error :: ', err);
+			console.log('status :: ', res.statusCode);
+			console.log('body :: ', body);
 		}
-		response.json({result:1});
-	})
+	});
 });
 
 app.get('*', (request, response) => {

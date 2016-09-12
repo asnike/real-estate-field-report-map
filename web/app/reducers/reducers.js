@@ -1,14 +1,52 @@
 import {combineReducers} from 'redux';
+import {browserHistory} from 'react-router';
+import update from 'react-addons-update';
 
-function basic(state={}, action){
+import { 
+	REQUEST_ADD_ITEM, 
+	REQUEST_ADD_ITEM_SUCCESS,
+	REQUEST_ADD_ITEM_ERROR,
+ } from '../actions/item';
+
+function item(state={isFetching:false}, action){
 	switch(action.type){
+	case REQUEST_ADD_ITEM:
+		return Object.assign({}, state, {
+			isFetching:true,
+		}); 
+	case REQUEST_ADD_ITEM_SUCCESS:
+		browserHistory.pushState(null, '/map');
+		return Object.assign({}, state, {
+			
+		}); 
+	case REQUEST_ADD_ITEM_ERROR:
+		browserHistory.pushState(null, '/map');
+		return Object.assign({}, state, {
+			
+		}); 
+	default :
+		return state;	
+	}
+}
+
+function modal(state={list:[]}, action){
+	switch(action.type){
+	case REQUEST_ADD_ITEM_SUCCESS:
+		return Object.assign({}, state, {
+			list:update(state.list, {$push:[{isShowing:true, contents:'등록했습니다.', callback:action.callback}]})
+		});
+	case REQUEST_ADD_ITEM_ERROR:
+		return Object.assign({}, state, {
+			list:update(state.list, {$push:[{isShowing:true, contents:'등록실패했습니다.', callback:action.callback}]})
+		});
 	default :
 		return state;	
 	}
 }
 
 const rootReducer = combineReducers({
-	basic
+	item,
+	modal,
 })
 
 export default rootReducer;
