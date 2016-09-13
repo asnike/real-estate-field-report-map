@@ -5,24 +5,40 @@ import * as ItemActions from '../actions/item';
 
 
 class MapView extends Component{
+	constructor(){
+		super(...arguments);
+		this.state = {
+			map:null	
+		}
+	}
 	componentWillReceiveProps(nextProps){
+		console.log('receive ::', nextProps);
+		
+		nextProps.item.lists.map((item) => {
+			var marker = new naver.maps.Marker({
+				position: new naver.maps.LatLng(map.lat, map.lon),
+				map: this.state.map
+			});
+		})
 		
 	}
 	componentDidMount(){
-		/*setTimeout(()=>{
+		setTimeout(()=>{
 			var mapOptions = {
 				center: new naver.maps.LatLng(37.3595704, 127.105399),
 				zoom: 10
 			};
-			var map = new naver.maps.Map('map', mapOptions);	
-		}, 100);*/
-		
+			this.setState({
+				map:new naver.maps.Map('map', mapOptions)
+			});
+		}, 100);
+		console.log('mount');
 		this.props.actions.item.getItems();
 	}
 	render(){
 		return (
 			<div>
-				<div id="map" style={{width:'100%', height:'100vh'}} className="naver-map">map</div>	
+				<div id="map" style={{width:'100vw', height:'100vh'}} className="naver-map">map</div>	
 				{this.props.children}
 			</div>
 		)
@@ -31,7 +47,7 @@ class MapView extends Component{
 
 function mapStateToProps(state){
 	return {
-		items:state.items
+		item:state.item
 	};
 }
 function mapDispatchToProps(dispatch){

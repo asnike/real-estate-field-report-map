@@ -54,7 +54,7 @@ function requestGetItems(){
 function receiveGetItemsSuccess(result){
 	return {
 		type:RECEIVE_GET_ITEMS_SUCCESS,
-		result,
+		lists:result.lists,
 	}
 }
 function receiveGetItemsError(error){
@@ -63,7 +63,7 @@ function receiveGetItemsError(error){
 		error,
 	}
 }
-export function getItems(item, callback){
+export function getItems(){
 	return dispatch => {
 		dispatch(requestGetItems);
 		fetch(`${constants.API_URL}/items`, {

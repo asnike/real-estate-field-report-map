@@ -103,9 +103,7 @@ app.post('/api/item', function (request, response) {
  console.log('after middleware member :: ', response.member._id);*/
 
 	var url = 'https://openapi.naver.com/v1/map/geocode?query=';
-	//var url = 'https://openapi.naver.com/v1/map/geocode?query=';
 	url += encodeURIComponent(item.addr);
-	console.log('url :: ', url);
 	(0, _request3.default)({
 		method: 'GET',
 		url: url,

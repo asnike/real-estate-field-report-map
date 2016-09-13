@@ -33,12 +33,10 @@ function item(state={isFetching:false, lists:null}, action){
 			isFetching:true,
 		}); 
 	case RECEIVE_GET_ITEMS_SUCCESS:
-		browserHistory.pushState(null, '/map');
 		return Object.assign({}, state, {
 			lists:action.lists,
 		}); 
 	case RECEIVE_GET_ITEMS_ERROR:
-		browserHistory.pushState(null, '/map');
 		return Object.assign({}, state, {
 			
 		}); 	
