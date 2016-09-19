@@ -8,7 +8,8 @@ class MapView extends Component{
 	constructor(){
 		super(...arguments);
 		this.state = {
-			map:null	
+			map:null,
+			infoWindow:null,
 		}
 	}
 	componentWillReceiveProps(nextProps){
@@ -19,17 +20,24 @@ class MapView extends Component{
 				position: new naver.maps.LatLng(item.lat, item.lon),
 				map: this.state.map
 			});
-			var content = [
-				'<div>',
-					'<h3>'+item.addr+'</h3>',
-					'<p>'+item.addr+'</p>',
-				'</div>'
-			].join('');
-			var infoWindow = new naver.maps.InfoWindow({
-				content:content	
-			});
-			infoWindow.open(map, this.state.marker);
+			naver.maps.Event.addListener(marker, 'click', this.makerClick.bind(this));
 		})
+		
+	}
+	makerClick(e){
+		console.log(e);
+		var obj = this.props.item.lists.find(item=> item.lat == e.overlay.position._lat && item.lon == e.overlay.position._lng);
+		var content = [
+			'<div class="info-window">',
+				'<h3>'+obj.addr+'</h3>',
+				'<p>'+obj.addr+'</p>',
+			'</div>'
+		].join('');
+		
+		
+		if(this.state.infoWindow && this.state.infoWindow.getMap()) this.state.infoWindow.close();
+		this.state.infoWindow = new naver.maps.InfoWindow({content:content});
+		this.state.infoWindow.open(this.state.map, e.overlay.position);
 		
 	}
 	componentDidMount(){
@@ -49,7 +57,7 @@ class MapView extends Component{
 	render(){
 		return (
 			<div>
-				<div id="map" style={{width:'100vw', height:'100vh'}} className="naver-map">map</div>	
+				<div id="map" style={{width:'100px', height:'100px'}} className="naver-map">map</div>	
 				{this.props.children}
 			</div>
 		)

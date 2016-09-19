@@ -76,7 +76,7 @@ app.post('/api/item', (request, response) => {
 	}, (err, res, body)=>{
 		if(!err && res.statusCode == 200){
 			var t0 = JSON.parse(body);
-			item.lon = t0.result.items[0].point.x;
+			item.lng = t0.result.items[0].point.x;
 			item.lat = t0.result.items[0].point.y;
 			item.save((error)=>{
 				if(error){
