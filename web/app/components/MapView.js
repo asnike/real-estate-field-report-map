@@ -57,7 +57,7 @@ class MapView extends Component{
 	render(){
 		return (
 			<div>
-				<div id="map" style={{width:'100px', height:'100px'}} className="naver-map">map</div>	
+				<div id="map" style={{width:'100vw', height:'100vh'}} className="naver-map">map</div>	
 				{this.props.children}
 			</div>
 		)
