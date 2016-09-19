@@ -16,24 +16,35 @@ class MapView extends Component{
 		
 		nextProps.item.lists.map((item) => {
 			var marker = new naver.maps.Marker({
-				position: new naver.maps.LatLng(map.lat, map.lon),
+				position: new naver.maps.LatLng(item.lat, item.lon),
 				map: this.state.map
 			});
+			var content = [
+				'<div>',
+					'<h3>'+item.addr+'</h3>',
+					'<p>'+item.addr+'</p>',
+				'</div>'
+			].join('');
+			var infoWindow = new naver.maps.InfoWindow({
+				content:content	
+			});
+			infoWindow.open(map, this.state.marker);
 		})
 		
 	}
 	componentDidMount(){
 		setTimeout(()=>{
 			var mapOptions = {
-				center: new naver.maps.LatLng(37.3595704, 127.105399),
+				center: new naver.maps.LatLng(37.5450782, 126.9451998),
 				zoom: 10
 			};
 			this.setState({
 				map:new naver.maps.Map('map', mapOptions)
 			});
+			console.log('map set');
+			this.props.actions.item.getItems();
 		}, 100);
 		console.log('mount');
-		this.props.actions.item.getItems();
 	}
 	render(){
 		return (
