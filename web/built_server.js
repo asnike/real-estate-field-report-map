@@ -148,12 +148,12 @@ app.get('*', function (request, response) {
 	};
 
 	(0, _reactRouter.match)({ routes: _routes2.default, location: request.url }, function (error, redirectLocation, renderProps) {
+		console.log('url : ', request.url);
 		if (error) {
 			response.status(500).send(error.message);
 		} else if (redirectLocation) {
 			response.redirect(302, redirectLocation.pathname + redirectLocation.search);
 		} else if (renderProps) {
-			console.log('url : ', request.url);
 			renderRoute(response, renderProps);
 		} else {
 			response.status(404).send(request.url);

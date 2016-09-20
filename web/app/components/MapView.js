@@ -16,11 +16,21 @@ class MapView extends Component{
 		console.log('receive ::', nextProps);
 		
 		nextProps.item.lists.map((item) => {
-			var marker = new naver.maps.Marker({
+			/*var marker = new naver.maps.Marker({
 				position: new naver.maps.LatLng(item.lat, item.lon),
 				map: this.state.map
 			});
-			naver.maps.Event.addListener(marker, 'click', this.makerClick.bind(this));
+			naver.maps.Event.addListener(marker, 'click', this.makerClick.bind(this));*/		
+			
+			var unarySpotMarker = new naver.maps.Marker({
+				position:new naver.maps.LatLng(item.lat, item.lon),
+				map: this.state.map,
+				title: item.addr,
+				icon: {
+					content: '<div style="background:#fff;border:1px solid #eee;border-radius:8px;">' + item.addr + '</div>',
+					
+				}
+			});	
 		})
 		
 	}
@@ -56,13 +66,14 @@ class MapView extends Component{
 	}
 	render(){
 		return (
-			<div>
-				<div id="map" style={{width:'100vw', height:'100vh'}} className="naver-map">map</div>	
+			<div style={{width:'100%', height:'100vh'}}>
+				<div id="map" style={{width:'100%', height:'100vh'}} className="naver-map">map</div>	
 				{this.props.children}
 			</div>
 		)
 	}
 }
+
 
 function mapStateToProps(state){
 	return {
